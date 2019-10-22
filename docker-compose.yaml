@@ -1,0 +1,31 @@
+version: '2'
+services: 
+  ubuntu:
+    image: ubuntu:latest
+    container_name: ubuntu-runner
+    networks: 
+      static-network: 
+        ipv4_address: 10.2.21.100
+        aliases:
+        - gitlab.local
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    networks:
+      static-network:
+        ipv4_address: 10.2.21.110
+    container_name: gitlab
+    ports:
+    - "30080:30080" 
+    - "30022:22"
+    environment:
+    - GITLAB_OMNIBUS_CONFIG="external_url 'http://gitlab.local:30080'; gitlab_rails['gitlab_shell_ssh_port']=30033;"
+
+
+networks:
+  static-network:
+    driver: bridge
+    ipam: 
+      driver: default
+      config:
+      - subnet: 10.2.21.0/24
+        ip_range: 10.2.22.0/24
