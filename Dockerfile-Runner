@@ -9,7 +9,6 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists/*
 
 ## Install apt-add-repository tool
-#RUN apt-get -y update && apt-get -y install software-properties-common
 RUN apt-get update && apt-get -qy --no-install-recommends install \
         curl \
         ca-certificates \
@@ -30,5 +29,5 @@ RUN apt-add-repository ppa:openjdk-r/ppa && \
 
 ## Install  with Node
 RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
-    apt install nodejs && \
+    apt install nodejs -y  --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
