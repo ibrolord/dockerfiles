@@ -1,0 +1,34 @@
+## Docker File to install NPM, Jmerge, AWSCLi, Basic Repos
+FROM artifactory.otxlab.net/hightail-docker/ht/ubuntu:14.04
+
+LABEL maintainer="bagunbiade@opentext.com"
+
+## Install apt-add-repository tool
+RUN apt-get -y update && \
+    apt-get -y --no-install-recommends install software-properties-common && \
+    rm -rf /var/lib/apt/lists/*
+
+## Install apt-add-repository tool
+#RUN apt-get -y update && apt-get -y install software-properties-common
+RUN apt-get update && apt-get -qy --no-install-recommends install \
+        curl \
+        ca-certificates \
+        gnupg2 \
+        awscli \
+        lsof \
+        build-essential \
+        git && \
+        apt-get clean
+
+## Install for openjdk8
+RUN apt-add-repository ppa:openjdk-r/ppa && \
+    apt-get update && \
+          apt-get -y --no-install-recommends install openjdk-8-jdk ca-certificates-java && \
+          apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    update-java-alternatives -s java-1.8.0-openjdk-amd64
+
+## Install  with Node
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
+    apt install nodejs && \
+    rm -rf /var/lib/apt/lists/*
