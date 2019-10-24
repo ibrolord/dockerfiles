@@ -1,0 +1,44 @@
+image: 527265731395.dkr.ecr.us-east-1.amazonaws.com/opentext/ot-signer:gitlab-exec-runner
+
+variables:
+  DOCKER_REGISTRY: 527265731395.dkr.ecr.us-east-1.amazonaws.com
+  GITLAB_ARTIFACTS: /tmp/gitlabci-artifacts
+  GITLAB_TEST_RESULTS: /tmp/gitlabci-test-result
+
+before_script:
+  - echo "Login to Registry"
+  - aws ecr get-login --region us-east-1 | sed 's/-e none//g' | sh
+  - IMAGE="$DOCKER_REGISTRY/opentext/ot-signer:gitlab-exec-runner" && if docker image inspect $IMAGE >/dev/null 2>&1 ; then echo 'Image already exists, no need to pull or build' ; else docker build -t $IMAGE --build-arg DOCKER_REGISTRY=$DOCKER_REGISTRY . ; fi
+ # - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+  - mkdir -p $GITLAB_ARTIFACTS $GITLAB_TEST_RESULTS
+  - if [ ! -d ~/opentext/ot-signer ]; then mkdir -p ~/opentext/ot-signer; fi && cd ~/opentext/ot-signer
+
+stages: 
+  - build
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+    - echo "Running Tests"
+    - cd /tmp
+    - npm install -g junit-merge@2.0.0
+    - mkdir -p $GITLAB_TEST_RESULTS/upload/django
+    - junit-merge -o $GITLAB_TEST_RESULTS/junit_merged.xml $GITLAB_TEST_RESULTS/*/junit.xml
+    - cp $GITLAB_TEST_RESULTS/junit.xml $GITLAB_TEST_RESULTS/upload
+  artifacts:
+      paths:
+        - /tmp/circleci-artifacts/email_samples
+      reports:
+        junit: $GITLAB_TEST_RESULTS/upload/junit.xml
+
+post-build:
+  stage: post-build
+  only:
+    - dev
+  script: 
+    - echo "Building Repo"
+ #   - docker push $REPOSITORY_URL:$IMAGE_TAG
+    - docker push $DOCKER_REGISTRY/opentext/ot-signer:gitlab-exec-runner
+    - docker push 
