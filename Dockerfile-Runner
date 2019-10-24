@@ -28,6 +28,5 @@ RUN apt-add-repository ppa:openjdk-r/ppa && \
     update-java-alternatives -s java-1.8.0-openjdk-amd64
 
 ## Install  with Node
-RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
-    apt install nodejs -y  --no-install-recommends && \
+RUN apt install nodejs npm -y  --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
