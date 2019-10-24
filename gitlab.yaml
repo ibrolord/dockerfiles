@@ -7,7 +7,7 @@ services:
     #    ipv4_address: 10.2.21.110
     container_name: gitlab
     ports:
-    - "80:80"
+    - "880:80"
     - "222:22"
     environment:
     - GITLAB_OMNIBUS_CONFIG="external_url 'http://3.133.19.158:880'; gitlab_rails['gitlab_shell_ssh_port']=30033;"
