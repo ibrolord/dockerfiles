@@ -4,7 +4,7 @@ sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloa
 sudo chmod +x /usr/local/bin/gitlab-runner ;
 curl -sSL https://get.docker.com/ | sh ;
 sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash ;
-sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner sudo gitlab-runner start ;
+sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && sudo gitlab-runner start ;
 ps aux | grep gitlab-runner && sleep 5 ;
 gitlab-runner register #from gitlab project settings -> runners -> expand ;
 usermod -aG docker gitlab-runner ;
