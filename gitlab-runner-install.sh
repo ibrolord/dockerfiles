@@ -23,7 +23,7 @@ sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab
 ps aux | grep gitlab-runner ; 
 gitlab-runner register #from gitlab project settings -> runners -> expand ;
 sleep 5 ;
-usermod -aG docker gitlab-runner ;
+useradd docker && usermod -aG docker gitlab-runner ;
 #sed '/^root    ALL=(ALL:ALL) ALL.*/a gitlab-runner ALL=(ALL) NOPASSWD: ALL ' /etc/sudoers
 sed -i '/^root.*/a gitlab-runner ALL=(ALL) NOPASSWD: ALL ' /etc/sudoers ;
 sudo gitlab-runner restart
