@@ -1,5 +1,20 @@
 #Git Lab Runner
-apt update && apt upgrade -y ;
+sudo apt update && apt upgrade -y ;
+: <<'longcomm'
+sudo apt-get remove docker docker-engine docker.io ;
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common ;
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ;
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable" ;
+sudo apt-get update &&  sudo apt-get install docker-ce
+longcomm
+
 sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-386 ;
 sudo chmod +x /usr/local/bin/gitlab-runner ;
 curl -sSL https://get.docker.com/ | sh ;
